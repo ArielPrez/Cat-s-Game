@@ -5,11 +5,13 @@
  "version": "0.2.0",
  "configurations": [
   {
-   "type": "chrome",
-   "request": "launch",
-   "name": "Launch Chrome against localhost",
-   "url": "http://localhost:4200",
-   "webRoot": "${workspaceFolder}"
+    "name": "Debug Chrome",
+    "request": "launch",
+    "type": "chrome",
+    "url": "http://localhost:4200",
+    "preLaunchTask": "ngserve",
+    "webRoot": "${workspaceFolder}"
+
   }
  ]
 }
