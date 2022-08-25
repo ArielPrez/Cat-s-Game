@@ -13,24 +13,3 @@ body {
   margin: 0px;
 }
 
-.board {
-  width: 600px;
-  height: 600px;
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  justify-items: center;
-  align-items: center;
-  grid-template-columns: repeat(3, auto);
-}
-
-.cell {
-  width: var(--cell-size);
-  height: var(--cell-size);
-  border: 1px solid black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-}
