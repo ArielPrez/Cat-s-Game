@@ -1,0 +1,72 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "ngserve",
+			"type": "shell",
+			"args": [
+        "serve"
+      ],
+      "command": "ng",
+      "isBackground": true,
+			"problemMatcher": [
+        {
+          "pattern": [
+            {
+              "regexp": "\\b\\B",
+              "file": 1,
+              "location": 2,
+              "message": 3
+            }
+          ],
+          "background": {
+            "activeOnStart": false,
+            "beginsPattern": ".",
+            "endsPattern": "^.*Compiled successfully.*"
+          }
+        }
+      ],
+		},
+    {
+      "label": "ng build local",
+      "type": "shell",
+      "args": [
+        "build",
+      ],
+      "command": "ng",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "group": "build",
+      "detail": "ng build"
+    },
+    {
+      "label": "ng build Prod",
+      "type": "shell",
+      "args": [
+        "build",
+        "--configuration=production"
+      ],
+      "command": "ng",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "group": "build",
+      "detail": "ng build production"
+    },
+    {
+      "label": "ng build Dev",
+      "type": "shell",
+      "args": [
+        "build",
+        "--configuration=dev"
+      ],
+      "command": "ng",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "group": "build",
+      "detail": "ng build dev"
+    }
+  ]
+}
