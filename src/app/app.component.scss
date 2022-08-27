@@ -1,7 +1,9 @@
 
 .board {
-  width: 600px;
-  height: 600px;
+  margin: 10px;
+  border: 1px dotted rgba(128, 128, 128, 0.5);
+  width: 450px;
+  height: 450px;
   display: grid;
   justify-content: center;
   align-content: center;
@@ -102,3 +104,35 @@ border-top: none;
   background-color: white;
 }
 
+.message {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0, 0.9);
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 36px;
+  flex-direction: column;
+
+  button {
+    font-size: 22px;
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px 7px;
+    margin-top: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color:black;
+    color: white;
+    border-color: white;
+  }
+}
+
+.message.show {
+  display: flex;
+}
