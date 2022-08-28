@@ -1,0 +1,6 @@
+<div #board class="board" id="board">
+  <div *ngFor="let cell of cells; let i=index" class="cell" #dataCell
+        (click)="handleClick($event, i)">
+  </div>
+</div>
+<!-- [class]="currentIndex === i? 'cell' + currentClass : 'cell'" -->
