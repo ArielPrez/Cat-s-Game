@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-board',
@@ -7,8 +7,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 })
 export class BoardComponent implements OnInit {
 
-  @ViewChild('board') board!: ElementRef<HTMLDivElement>;
-  // @ViewChild('dataCell') dataCell!: ElementRef;
+  // @ViewChild('board') board!: ElementRef<HTMLDivElement>;
+  @Output() message: EventEmitter<string> = new EventEmitter();
 
   private cross: string = 'x'
   private circle: string = 'circle'
@@ -32,8 +32,6 @@ export class BoardComponent implements OnInit {
 
   constructor() { }
 
-  ng(): void {}
-
   public ngOnInit(): void {
     // this.startGame();
 
@@ -55,16 +53,14 @@ export class BoardComponent implements OnInit {
   }
 
   public handleClick(index: number): void {
-    if (this.currentClass === 'show') {
+    if (this.currentClass === '') {
       this.currentClass = 'x';
     }
     this.cells[index] = this.currentClass;
     if (this.checkWin()) {
       this.endGame(false);
-      this.currentClass = 'show';
     } else if(this.isDraw()) {
       this.endGame(true);
-      this.currentClass = 'show';
     } else {
       this.currentClass = this.isCircle ? this.circle : this.cross;
       this.isCircle = !this.isCircle;
@@ -83,11 +79,12 @@ export class BoardComponent implements OnInit {
   }
 
   private endGame(draw: boolean): void {
+    this.currentClass = '';
     this.cells = ['','','','','','','','',''];
     if (draw) {
-      alert("It's Draw!");
+      this.message.emit("It's Draw!");
     } else {
-      alert(this.isCircle? "X's" : "O's" + "Wins!");
+      this.message.emit((this.isCircle? "X's" : "O's") + "Wins!");
     }
   }
 
