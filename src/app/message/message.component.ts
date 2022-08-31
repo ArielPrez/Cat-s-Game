@@ -1,18 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
   styleUrls: ['./message.component.scss']
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent implements OnInit, OnChanges {
 
   @Input() message!: string;
 
-  // public message: string = '';
+  @Output() restart: EventEmitter<boolean> = new EventEmitter();
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  ngOnChanges(): void {
+    if (this.message !== '') {
+      console.log(this.message);
+    }
   }
 
 }

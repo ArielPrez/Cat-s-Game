@@ -7,11 +7,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class AppComponent {
 
-  // @Output() gameResult: EventEmitter<string> = new EventEmitter();
-
   public gameResult: string = '';
+  public reset: boolean = false;
 
   public setMessage(message: string): void {
     this.gameResult = message;
+  }
+
+  public resetGame(reset: boolean): void {
+    this.reset = reset;
   }
 }

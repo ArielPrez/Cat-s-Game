@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-board',
@@ -8,6 +8,7 @@ import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '
 export class BoardComponent implements OnInit {
 
   // @ViewChild('board') board!: ElementRef<HTMLDivElement>;
+  @Input() isNew!: boolean;
   @Output() message: EventEmitter<string> = new EventEmitter();
 
   private cross: string = 'x'

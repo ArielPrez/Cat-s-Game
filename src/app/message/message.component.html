@@ -1,4 +1,7 @@
 <div [class]="'message ' + (message !== ''? 'show' : '')" id="message">
   <div class="" >{{message}}</div>
-  <button id="reset">Reset Game</button>
+  <button id="reset"
+          (click)="restart.emit(true); message = ''">
+    Reset Game
+  </button>
 </div>
