@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-board',
@@ -7,8 +7,8 @@ import { Component, ElementRef, OnInit, QueryList, ViewChild } from '@angular/co
 })
 export class BoardComponent implements OnInit {
 
-  @ViewChild('board') board: HTMLElement | undefined;
-  @ViewChild('dataCell') dataCell!: QueryList<ElementRef>;
+  @ViewChild('board') board!: ElementRef<HTMLDivElement>;
+  // @ViewChild('dataCell') dataCell!: ElementRef;
 
   private cross: string = 'x'
   private circle: string = 'circle'
@@ -23,24 +23,25 @@ export class BoardComponent implements OnInit {
     [2, 4, 6]
   ];
 
-  public currentClass: string = ''
-  public currentIndex: number = NaN;
+  public currentClass: string = 'x'
+  // public currentIndex: number = 0;
 
   public cells: string[] = ['','','','','','','','',''];
 
-  private isCircle: boolean = false;
+  private isCircle: boolean = true;
 
   constructor() { }
 
-  public ngOnInit(): void {
+  ng(): void {}
 
-    this.startGame();
+  public ngOnInit(): void {
+    // this.startGame();
 
     // this.setBoardHoverClass();
     // this.winningMessageElement.classList.remove('show');
   }
 
-  public startGame(): void {
+  private startGame(): void {
 
     // this.dataCell?.nativeElement.querySelectorAll('[dataCell]').forEach(
     //   (c): void => {
@@ -53,40 +54,40 @@ export class BoardComponent implements OnInit {
 
   }
 
-  public handleClick(e: MouseEvent, index: number): void {
-    this.currentIndex = index;
-    console.log(e);
-    let event: HTMLElement = e.target as HTMLElement;
-    const cell: HTMLElement = event;
-    this.currentClass = this.isCircle ? this.circle : this.cross;
+  public handleClick(index: number): void {
+    if (this.currentClass === 'show') {
+      this.currentClass = 'x';
+    }
     this.cells[index] = this.currentClass;
-    this.placeMark(cell);
     if (this.checkWin()) {
       this.endGame(false);
+      this.currentClass = 'show';
     } else if(this.isDraw()) {
       this.endGame(true);
+      this.currentClass = 'show';
     } else {
+      this.currentClass = this.isCircle ? this.circle : this.cross;
       this.isCircle = !this.isCircle;
-      this.setBoardHoverClass(cell);
+      // this.setBoardHoverClass();
     }
-  }
 
-  private placeMark(cell: HTMLElement): void {
-    cell.classList.add(this.currentClass);
   }
 
   private checkWin(): boolean {
-    let toReturn: boolean = false;
-
-    return toReturn;
+    return this.winningComb.some(
+      (combination): boolean => {
+        return combination.every((i): boolean => {
+          return this.cells[i] === this.currentClass;
+        })
+      });
   }
 
   private endGame(draw: boolean): void {
+    this.cells = ['','','','','','','','',''];
     if (draw) {
       alert("It's Draw!");
     } else {
-      alert(this.isCircle? "0's" : "x's" + "Wins!");
-
+      alert(this.isCircle? "X's" : "O's" + "Wins!");
     }
   }
 
@@ -96,16 +97,15 @@ export class BoardComponent implements OnInit {
     );
   }
 
-  private setBoardHoverClass(cell: HTMLElement): void {
-    this.board?.classList.remove(this.cross);
-    this.board?.classList.remove(this.circle);
-    if (this.isCircle) {
-      this.board?.classList.add(this.circle);
-    } else {
-      this.board?.classList.add(this.cross);
-    }
-    console.log(this.board);
-    console.log(this.cells);
-  }
+  // private setBoardHoverClass(): void {
+  //   this.board?.nativeElement.classList.remove(this.cross);
+  //   this.board?.nativeElement.classList.remove(this.circle);
+  //   if (this.isCircle) {
+  //     this.board?.nativeElement.classList.add(this.circle);
+  //   } else {
+  //     this.board?.nativeElement.classList.add(this.cross);
+  //   }
+  // }
+
 
 }
