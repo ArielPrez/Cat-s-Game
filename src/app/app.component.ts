@@ -11,10 +11,12 @@ export class AppComponent {
   public reset: boolean = false;
 
   public setMessage(message: string): void {
+    this.reset = false;
     this.gameResult = message;
   }
 
   public resetGame(reset: boolean): void {
+    this.gameResult = '';
     this.reset = reset;
   }
 }

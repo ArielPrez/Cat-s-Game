@@ -7,7 +7,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class BoardComponent implements OnInit {
 
-  // @ViewChild('board') board!: ElementRef<HTMLDivElement>;
   @Input() isNew!: boolean;
   @Output() message: EventEmitter<string> = new EventEmitter();
 
@@ -25,47 +24,25 @@ export class BoardComponent implements OnInit {
   ];
 
   public currentClass: string = 'x'
-  // public currentIndex: number = 0;
 
   public cells: string[] = ['','','','','','','','',''];
 
-  private isCircle: boolean = true;
+  private isCircle: boolean = false;
 
   constructor() { }
 
-  public ngOnInit(): void {
-    // this.startGame();
-
-    // this.setBoardHoverClass();
-    // this.winningMessageElement.classList.remove('show');
-  }
-
-  private startGame(): void {
-
-    // this.dataCell?.nativeElement.querySelectorAll('[dataCell]').forEach(
-    //   (c): void => {
-    //     c.nativeElement.classList.remove(this.cross);
-    //     c.nativeElement.classList.remove(this.circle);
-    //     c.nativeElement.removeEventListener('click', (e: MouseEvent): void => this.handleClick(e));
-    //     c.nativeElement.addEventListener('click', (e: MouseEvent): void => this.handleClick(e), { once: true });
-    //   }
-    // );
-
-  }
+  public ngOnInit(): void { }
 
   public handleClick(index: number): void {
-    if (this.currentClass === '') {
-      this.currentClass = 'x';
-    }
+    this.currentClass = this.isCircle ? this.circle : this.cross;
     this.cells[index] = this.currentClass;
     if (this.checkWin()) {
       this.endGame(false);
     } else if(this.isDraw()) {
       this.endGame(true);
     } else {
-      this.currentClass = this.isCircle ? this.circle : this.cross;
       this.isCircle = !this.isCircle;
-      // this.setBoardHoverClass();
+      this.currentClass = this.isCircle ? this.circle : this.cross;
     }
 
   }
@@ -80,12 +57,10 @@ export class BoardComponent implements OnInit {
   }
 
   private endGame(draw: boolean): void {
-    this.currentClass = '';
-    this.cells = ['','','','','','','','',''];
     if (draw) {
       this.message.emit("It's Draw!");
     } else {
-      this.message.emit((this.isCircle? "X's" : "O's") + "Wins!");
+      this.message.emit((this.isCircle? "O's" : "X's") + "Wins!");
     }
   }
 
@@ -95,15 +70,17 @@ export class BoardComponent implements OnInit {
     );
   }
 
-  // private setBoardHoverClass(): void {
-  //   this.board?.nativeElement.classList.remove(this.cross);
-  //   this.board?.nativeElement.classList.remove(this.circle);
-  //   if (this.isCircle) {
-  //     this.board?.nativeElement.classList.add(this.circle);
-  //   } else {
-  //     this.board?.nativeElement.classList.add(this.cross);
-  //   }
-  // }
+  public isReady(): boolean {
+    if (this.isNew) {
+      this.currentClass = 'x';
+      this.cells = ['','','','','','','','',''];
+      this.isCircle = false;
+      this.isNew = false;
+      return true;
+    } else {
+      return false;
+    }
 
+  }
 
 }
