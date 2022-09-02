@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +6,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Cat-s-Game';
+
+  public gameResult: string = '';
+  public reset: boolean = false;
+
+  public setMessage(message: string): void {
+    this.reset = false;
+    this.gameResult = message;
+  }
+
+  public resetGame(reset: boolean): void {
+    this.gameResult = '';
+    this.reset = reset;
+  }
 }

@@ -1,5 +1,9 @@
-<div #board [class]="'board ' + currentClass" id="board">
-  <div *ngFor="let cell of cells; let i=index" [class]="'cell ' +  cells[i]" [id]="i"
+<div #board
+     [class]="'board ' + currentClass"
+     [hidden]="isReady()">
+  <div *ngFor="let cell of cells; let i=index"
+        [class]="'cell ' +  cells[i]"
+        [id]="i"
         (click)="cell === ''? handleClick(i) : ''; $event.stopPropagation();">
   </div>
 </div>

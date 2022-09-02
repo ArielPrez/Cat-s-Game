@@ -1,3 +1,5 @@
-<app-board></app-board>
+<app-board (message)="setMessage($event)"
+           [isNew]="reset"></app-board>
 
-<app-message></app-message>
+<app-message [message]="gameResult"
+             (restart)="resetGame($event)"></app-message>
