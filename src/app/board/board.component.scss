@@ -2,6 +2,7 @@
 .board {
   margin: 10px;
   border: 1px dotted rgba(128, 128, 128, 0.5);
+  border-radius: 15px;
   width: 450px;
   height: 450px;
   display: grid;
@@ -10,6 +11,7 @@
   justify-items: center;
   align-items: center;
   grid-template-columns: repeat(3, auto);
+  background-color: rgba(128, 128, 128, 0.05);
 }
 
 .cell {

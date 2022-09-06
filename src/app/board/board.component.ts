@@ -8,7 +8,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class BoardComponent implements OnInit {
 
   @Input() isNew!: boolean;
+  @Input() aiIndex!: number;
   @Output() message: EventEmitter<string> = new EventEmitter();
+  @Output() updateBoard: EventEmitter<Array<string>> = new EventEmitter();
+  @Output() updatePlay: EventEmitter<string> = new EventEmitter();
 
   private cross: string = 'x'
   private circle: string = 'circle'
@@ -23,26 +26,29 @@ export class BoardComponent implements OnInit {
     [2, 4, 6]
   ];
 
-  public currentClass: string = 'x'
+  public currentPlay: string = 'circle'
 
   public cells: string[] = ['','','','','','','','',''];
 
-  private isCircle: boolean = false;
+  private isCircle: boolean = true;
 
   constructor() { }
 
   public ngOnInit(): void { }
 
   public handleClick(index: number): void {
-    this.currentClass = this.isCircle ? this.circle : this.cross;
-    this.cells[index] = this.currentClass;
-    if (this.checkWin()) {
-      this.endGame(false);
-    } else if(this.isDraw()) {
-      this.endGame(true);
-    } else {
-      this.isCircle = !this.isCircle;
-      this.currentClass = this.isCircle ? this.circle : this.cross;
+    if (!isNaN(index)) {
+      this.cells[index] = this.currentPlay;
+      if (this.checkWin()) {
+        this.endGame(false);
+      } else if(this.isDraw()) {
+        this.endGame(true);
+      } else {
+        this.isCircle = !this.isCircle;
+        this.currentPlay = this.isCircle ? this.circle : this.cross;
+      }
+      this.updateBoard.emit(this.cells);
+      this.updatePlay.emit(this.currentPlay);
     }
 
   }
@@ -51,7 +57,7 @@ export class BoardComponent implements OnInit {
     return this.winningComb.some(
       (combination): boolean => {
         return combination.every((i): boolean => {
-          return this.cells[i] === this.currentClass;
+          return this.cells[i] === this.currentPlay;
         })
       });
   }
@@ -72,12 +78,17 @@ export class BoardComponent implements OnInit {
 
   public isReady(): boolean {
     if (this.isNew) {
-      this.currentClass = 'x';
+      this.currentPlay = 'x';
       this.cells = ['','','','','','','','',''];
       this.isCircle = false;
       this.isNew = false;
       return true;
     } else {
+      if (this.aiIndex !== NaN) {
+        console.log(this.aiIndex);
+        this.handleClick(this.aiIndex);
+        this.aiIndex = NaN;
+      }
       return false;
     }
 

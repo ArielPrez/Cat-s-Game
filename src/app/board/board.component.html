@@ -1,5 +1,5 @@
 <div #board
-     [class]="'board ' + currentClass"
+     [class]="'board ' + currentPlay"
      [hidden]="isReady()">
   <div *ngFor="let cell of cells; let i=index"
         [class]="'cell ' +  cells[i]"
