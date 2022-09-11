@@ -103,5 +103,7 @@ border-top: none;
 .board.circle .cell:not(.x):not(.circle):hover::after {
   width: calc(var(--mark-size) * 0.7);
   height: calc(var(--mark-size) * 0.7);
-  background-color: white;
+  // background-color: white;
+  background-color: rgba(249, 249, 249, 1);
+
 }

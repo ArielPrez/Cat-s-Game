@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { BoardComponent } from './board/board.component';
 
 @Component({
   selector: 'app-root',
@@ -6,6 +7,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+  @ViewChild('boardElement') boardElement: BoardComponent = new BoardComponent;
 
   public reset: boolean = false;
   public gameResult: string = '';
@@ -32,6 +35,8 @@ export class AppComponent {
   }
 
   public setAIMove(move: number): void {
-    this.index = move;
+    // this.index = move;
+    this.boardElement.aiIndex = move;
+    this.boardElement.handleClick(move);
   }
 }
