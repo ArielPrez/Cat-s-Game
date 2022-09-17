@@ -40,7 +40,7 @@ export class AiPlayerComponent implements OnInit {
   public getChange(): boolean {
     let toReturn: boolean = false;
     const count: number = this.getMarksCount();
-    if (this.aiPlay === '') {
+    if (this.aiPlay === '' && this.play !== '') {
       this.aiPlay = this.play
       if (this.aiPlay === 'x') {
         this.human = 'circle';
@@ -51,11 +51,11 @@ export class AiPlayerComponent implements OnInit {
     if (count !== this.boardLength && count !== 0 && this.play === this.aiPlay) {
       this.boardLength = count;
       const move: number = this.bestMove();
-      console.log("Board value: ", this.evaluate());
+      // console.log("Board value: ", this.evaluate());
       this.move.emit(move);
-      toReturn = true;
-      // setTimeout((): void => { // AI Turn! =>
-      // }, 500);
+      setTimeout((): void => { // AI Turn! =>
+        toReturn = true;
+      }, 500);
     }
     return toReturn;
   }
@@ -84,19 +84,14 @@ export class AiPlayerComponent implements OnInit {
     for (let i: number = 0; i < this.board.length; i++) {
       if (this.board[i] === '') {
         this.board[i] = this.aiPlay;
-        let score: number = this.minimax(0, false);
+        let s: number = this.minimax(0 + 1, true);
         this.board[i] = '';
-        bestScore = Math.min(score, bestScore);
+        if (Math.min(s, bestScore)) {
+          bestScore = Math.min(s, bestScore);
+          toReturn = i;
+        }
       }
     }
-
-    // if (this.aiPlay === player) {
-    // }
-      // for (let j: number = 0; j < 3; j++) {
-      // }
-
-    // board[move.i][move.j] = ai;
-    // currentPlayer = human;
     return toReturn;
   }
 
@@ -129,20 +124,37 @@ export class AiPlayerComponent implements OnInit {
             }
             if (value === 30) {
               console.log("x win!!!");
+              value = 10;
             } else if(value === -30) {
               console.log('circle win!!');
+              value = -10;
             } else {
               value = 0;
               console.log("/\ draw or empty spot /");
             }
           }
-          // console.log(i+' : '+value);
     });
     return value;
   }
 
   private isMovesLeft(): boolean {
     return !this.board.some(c => c !== '');
+  }
+
+  private checkWin(): number {
+    return this.winningComb.some(
+      (combination): boolean => {
+        return combination.every((i): boolean => {
+          return this.board[i] === 'x';
+        })
+      }) ?
+      10 : this.winningComb.some(
+            (combination): boolean => {
+              return combination.every((i): boolean => {
+                return this.board[i] === 'circle';
+              })
+            }) ?
+            -10 : 0 ;
   }
 
   //[-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-]
@@ -192,7 +204,8 @@ export class AiPlayerComponent implements OnInit {
   // It considers all the possible ways the game can go and returns the value of the board
 
   private minimax(depth: number, isMaximizing: boolean): number {
-    let score: number = this.evaluate();
+    let score: number = this.checkWin();
+    // let score: number = this.evaluate();
     if (score === 10) {
       return score;
     } else if (score === -10) {
@@ -202,23 +215,25 @@ export class AiPlayerComponent implements OnInit {
       return 0;
     }
 
-    if (isMaximizing) {
-      let best: number = -1000;
+    if (isMaximizing) { // X turn
+      let best: number = -Infinity;
       for (let i: number = 0; i < this.board.length; i++) {
         if (this.board[i] === '') {
           this.board[i] = this.human;
-          best = Math.max(best, this.minimax(depth + 1, !isMaximizing));
+          let s: number = this.minimax(depth + 1, false);
           this.board[i] = '';
+          best = Math.max(s, best);
         }
       }
       return best;
-    } else {
-      let best: number = 1000;
+    } else { // Circle turn
+      let best: number = Infinity;
       for (let i: number = 0; i < this.board.length; i++) {
         if (this.board[i] === '') {
           this.board[i] = this.aiPlay;
-          best = Math.min(best, this.minimax(depth + 1, isMaximizing));
+          let s: number = this.minimax(depth + 1, true);
           this.board[i] = '';
+          best = Math.min(s, best);
         }
       }
       return best;
