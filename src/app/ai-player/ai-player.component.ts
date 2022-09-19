@@ -15,27 +15,23 @@ export class AiPlayerComponent implements OnInit {
   @Output() move: EventEmitter<number> = new EventEmitter();
 
   private boardLength: number = 0;
-
-  private w: number = 0; // width / 3
-  private h: number = 0; // height / 3
   public aiPlay: string = '';
-  private winningComb: number[][] = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ];
   private human: string = '';
-  // private currentPlayer: string = this.human;
+  private winningComb: number[][] = [
+    [0, 1, 2], // 0
+    [3, 4, 5], // 1
+    [6, 7, 8], // 2
+    [0, 3, 6], // 3
+    [1, 4, 7], // 4
+    [2, 5, 8], // 5
+    [0, 4, 8], // 6
+    [2, 4, 6]  // 7
+  ];
+  private count: number = 0;
 
   constructor() { }
 
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void {}
 
   public getChange(): boolean {
     let toReturn: boolean = false;
@@ -51,7 +47,6 @@ export class AiPlayerComponent implements OnInit {
     if (count !== this.boardLength && count !== 0 && this.play === this.aiPlay) {
       this.boardLength = count;
       const move: number = this.bestMove();
-      // console.log("Board value: ", this.evaluate());
       this.move.emit(move);
       setTimeout((): void => { // AI Turn! =>
         toReturn = true;
@@ -84,10 +79,13 @@ export class AiPlayerComponent implements OnInit {
     for (let i: number = 0; i < this.board.length; i++) {
       if (this.board[i] === '') {
         this.board[i] = this.aiPlay;
-        let s: number = this.minimax(0 + 1, true);
+        let s: number = this.minimax(0 , true);
+        console.log("s: ", s);
         this.board[i] = '';
-        if (Math.min(s, bestScore)) {
-          bestScore = Math.min(s, bestScore);
+        if (s > bestScore) {
+          bestScore = s;
+          // bestScore = Math.min(s, bestScore);
+          console.log(this.count);
           toReturn = i;
         }
       }
@@ -95,208 +93,62 @@ export class AiPlayerComponent implements OnInit {
     return toReturn;
   }
 
-  private evaluate(): number {
-    let value: number = 0;
-
-    this.winningComb
-        .forEach((combination: number[], i: number): void => {
-          if (value === 0) {
-            combination.forEach((c: number): void => {
-              if (this.board[c] === this.aiPlay && i < 3) { // Horizontal x 3
-                value -= 10;
-              } else if (this.board[c] === this.aiPlay && i > 2 && i < 6) { // Vertical x 3
-                value -= 10;
-              } else if (this.board[c] === this.aiPlay) { // Diagonal x 2
-                value -= 10;
-              }
-            });
-            if (value > -30) {
-              value = 0;
-              combination.forEach((c: number): void => {
-                if (this.board[c] === this.play && i < 3) { // Horizontal x 3
-                  value += 10;
-                } else if (this.board[c] === this.play && i > 2 && i < 6) { // Vertical x 3
-                  value += 10;
-                } else if (this.board[c] === this.play) { // Diagonal x 2
-                  value += 10;
-                }
-              });
-            }
-            if (value === 30) {
-              console.log("x win!!!");
-              value = 10;
-            } else if(value === -30) {
-              console.log('circle win!!');
-              value = -10;
-            } else {
-              value = 0;
-              console.log("/\ draw or empty spot /");
-            }
-          }
-    });
-    return value;
-  }
-
-  private isMovesLeft(): boolean {
-    return !this.board.some(c => c !== '');
-  }
-
   private checkWin(): number {
     return this.winningComb.some(
-      (combination): boolean => {
-        return combination.every((i): boolean => {
-          return this.board[i] === 'x';
-        })
-      }) ?
-      10 : this.winningComb.some(
-            (combination): boolean => {
-              return combination.every((i): boolean => {
-                return this.board[i] === 'circle';
-              })
-            }) ?
-            -10 : 0 ;
+              (combination): boolean => {
+                return combination.every((i): boolean => {
+                  return this.board[i] === 'x';
+                }) ? true : false;
+              }) ? 10
+            : this.winningComb.some(
+              (combination): boolean => {
+                return combination.every((i): boolean => {
+                  return this.board[i] === 'circle';
+                }) ? true : false;
+              }) ? -10
+            : 0 ;
   }
 
   //[-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-]
-
-  // private setup(): void {
-  //   // this.nextTurn();
-  // }
-
-  // private equals3(a: string, b: string, c: string): boolean {
-  //   return a === b && b === c && a !== '';
-  // }
-
-  // private mousePressed(): void {
-  //   // if (currentPlayer === human) {
-  //   //   let i = floor(mouseX / w);
-  //   //   let j = floor(mouseY / h);
-  //   //   if (this.board[i][j] === '') {
-  //   //     this.board[i][j] = human;
-  //   //     currentPlayer = ai;
-  //   //     this.bestMove();
-  //   //   }
-  //   // }
-  // }
-
-  // private bestMove(): void {
-  //   let bestScore: number = -Infinity;
-  //   let move: number;
-  //   for (let i: number = 0; i < 3; i++) {
-  //     for (let j: number = 0; j < 3; j++) {
-  //       if (this.board[i][j] === '') {
-  //         this.board[i][j] = ai;
-  //         let score: number = minimax(this.board);
-  //         this.board[i][j] = '';
-  //         if (score > bestScore) {
-  //           bestScore = score;
-  //           move = { i, j };
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   board[move.i][move.j] = ai;
-  //   currentPlayer = human;
-
-  // }
 
   // It considers all the possible ways the game can go and returns the value of the board
 
   private minimax(depth: number, isMaximizing: boolean): number {
     let score: number = this.checkWin();
-    // let score: number = this.evaluate();
-    if (score === 10) {
+    if (score !== 0) {
+      this.count++;
       return score;
-    } else if (score === -10) {
-      return score;
-    }
-    if (this.isMovesLeft()) {
-      return 0;
-    }
-
-    if (isMaximizing) { // X turn
-      let best: number = -Infinity;
-      for (let i: number = 0; i < this.board.length; i++) {
-        if (this.board[i] === '') {
-          this.board[i] = this.human;
-          let s: number = this.minimax(depth + 1, false);
-          this.board[i] = '';
-          best = Math.max(s, best);
+    } else {
+      if (isMaximizing) { // X turn
+        let best: number = -1000;
+        for (let i: number = 0; i < this.board.length; i++) {
+          if (this.board[i] === '') {
+            this.board[i] = this.human;
+            let s: number = this.minimax(depth + 1, !isMaximizing);
+            this.board[i] = '';
+            // if (s > score) {
+            //   score = s;
+            // }
+            best = Math.max(s, best);
+          }
         }
-      }
-      return best;
-    } else { // Circle turn
-      let best: number = Infinity;
-      for (let i: number = 0; i < this.board.length; i++) {
-        if (this.board[i] === '') {
-          this.board[i] = this.aiPlay;
-          let s: number = this.minimax(depth + 1, true);
-          this.board[i] = '';
-          best = Math.min(s, best);
+        return best;
+      } else { // Circle turn
+        let best: number = 1000;
+        for (let i: number = 0; i < this.board.length; i++) {
+          if (this.board[i] === '') {
+            this.board[i] = this.aiPlay;
+            let s: number = this.minimax(depth + 1, !isMaximizing);
+            this.board[i] = '';
+            // if (s < score) {
+            //   score = s;
+            // }
+            best = Math.min(s, best);
+          }
         }
+        return best;
       }
-      return best;
     }
-
-    // return 1;
   }
-
-  // private evaluate(): number {
-  //   let toReturn: number = 0;
-
-  //   for (let row: number = 0; row < 3; row++) { // Checking for Rows for X or O victory.
-  //     if (this.board[row][0] === this.board[row][1] &&
-  //         this.board[row][1] === this.board[row][2]) {
-  //       if (this.board[row][0] === 'x') {
-  //         toReturn = +10;
-  //       } else {
-  //         toReturn = -10;
-  //       }
-  //     }
-  //   }
-
-  //   console.log(toReturn);
-  //   for (let col: number = 0; col < 3; col++) { // Checking for Columns for X or O victory.
-  //     if (this.board[0][col] === this.board[1][col] &&
-  //         this.board[1][col] === this.board[2][col]) {
-  //       if (this.board[0][col] === 'x') {
-  //         toReturn = +10;
-  //       } else {
-  //         toReturn = -10;
-  //       }
-  //     }
-  //   }
-  //   console.log(toReturn);
-  //   // Checking for Diagonals for X or O victory.
-  //   if (this.board[0][0] == this.board[1][1] && this.board[1][1] == this.board[2][2])
-  //   {
-  //       if (this.board[0][0] == 'x')
-  //           toReturn +10;
-  //       else
-  //           toReturn -10;
-  //   }
-  //   console.log(toReturn);
-
-  //   if (this.board[0][2] === this.board[1][1] &&
-  //       this.board[1][1] === this.board[2][0]) {
-  //     if (this.board[0][2] == 'x')
-  //         toReturn +10;
-  //     else
-  //         toReturn -10;
-  //   }
-
-  //   return toReturn; // If none have won return 0
-  // }
-
-  // private findBestMove(board: any): void { // This will return the best possible move for the player
-  //     let bestVal: number = -1000;
-  //     let bestMove: { row: number, col: number } = {
-  //       row: 0,
-  //       col: 0
-  //     };
-  //     bestMove.row = -1;
-  //     bestMove.col = -1;
-  // }
 
 }

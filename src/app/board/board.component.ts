@@ -37,20 +37,22 @@ export class BoardComponent implements OnInit {
   public ngOnInit(): void { }
 
   public handleClick(index: number): void {
-    if (!Number.isNaN(Number(index))) {
-      this.cells[index] = this.currentPlay;
-      if (this.checkWin()) {
-        this.endGame(false);
-      } else if(this.isDraw()) {
-        this.endGame(true);
-      } else {
-        this.isCircle = !this.isCircle;
-        this.currentPlay = this.isCircle ? this.circle : this.cross;
+    setTimeout((): void => {
+      if (!Number.isNaN(Number(index)) && !this.checkWin()) {
+        this.cells[index] = this.currentPlay;
+        if (this.checkWin()) {
+          this.endGame(false);
+        } else if(this.isDraw()) {
+          this.endGame(true);
+        } else {
+          this.isCircle = !this.isCircle;
+          this.currentPlay = this.isCircle ? this.circle : this.cross;
+        }
+        this.updateBoard.emit(this.cells);
+        this.updatePlay.emit(this.currentPlay);
+        this.aiIndex = NaN;
       }
-      this.updateBoard.emit(this.cells);
-      this.updatePlay.emit(this.currentPlay);
-      this.aiIndex = NaN;
-    }
+    })
 
   }
 
@@ -80,22 +82,14 @@ export class BoardComponent implements OnInit {
   public isReady(): boolean {
     let toReturn: boolean = false;
     if (this.isNew) {
-      setTimeout((): void =>{
-        this.currentPlay = 'x';
-        this.cells = ['','','','','','','','',''];
-        this.isCircle = false;
-        this.isNew = false;
-        toReturn = true;
-      });
+      this.currentPlay = 'x';
+      this.cells = ['','','','','','','','',''];
+      this.isCircle = false;
+      this.isNew = false;
+      toReturn = true;
     } else {
       return Number.isNaN(Number(this.aiIndex));
     }
-    // else {
-    //   if (!Number.isNaN(Number(this.aiIndex)) &&
-    //        this.aiIndex !== undefined) {
-    //     this.handleClick(this.aiIndex);
-    //   }
-    // }
 
     return toReturn;
   }
