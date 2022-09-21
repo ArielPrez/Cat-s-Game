@@ -12,11 +12,13 @@ export class AiPlayerComponent implements OnInit {
 
   @Input() board!: Array<string>;
   @Input() play!: string;
-  @Output() move: EventEmitter<number> = new EventEmitter();
+  @Output() aiMove: EventEmitter<number> = new EventEmitter();
 
   private boardLength: number = 0;
   public aiPlay: string = '';
   private human: string = '';
+  public move: number = NaN;
+  public aiMessage: string = '';
   private winningComb: number[][] = [
     [0, 1, 2], // 0
     [3, 4, 5], // 1
@@ -27,7 +29,6 @@ export class AiPlayerComponent implements OnInit {
     [0, 4, 8], // 6
     [2, 4, 6]  // 7
   ];
-  private count: number = 0;
 
   constructor() { }
 
@@ -46,11 +47,12 @@ export class AiPlayerComponent implements OnInit {
     }
     if (count !== this.boardLength && count !== 0 && this.play === this.aiPlay) {
       this.boardLength = count;
-      const move: number = this.bestMove();
-      this.move.emit(move);
+      this.move = this.bestMove();
       setTimeout((): void => { // AI Turn! =>
+        this.aiMove.emit(this.move);
+        this.move = NaN;
         toReturn = true;
-      }, 500);
+      }, 1500);
     }
     return toReturn;
   }
@@ -67,29 +69,27 @@ export class AiPlayerComponent implements OnInit {
     return toReturn;
   }
 
-  private bestMove(): number { // Minimax
+  private bestMove(): number {
     // let toReturn: number = Math.floor(Math.random() * 9 );
     // if (this.board[toReturn] !== '') {
     //   toReturn = this.bestMove();
     // }
 
     let toReturn: number = -1; // Index in the board of the best posible move;
-    let bestScore: number = -Infinity; // The score for a move.
+    let bestScore: number = Infinity; // The score for a move.
 
     for (let i: number = 0; i < this.board.length; i++) {
       if (this.board[i] === '') {
         this.board[i] = this.aiPlay;
         let s: number = this.minimax(0 , true);
-        console.log("s: ", s);
         this.board[i] = '';
-        if (s > bestScore) {
+        if (s < bestScore) {
           bestScore = s;
-          // bestScore = Math.min(s, bestScore);
-          console.log(this.count);
           toReturn = i;
         }
       }
     }
+
     return toReturn;
   }
 
@@ -98,57 +98,59 @@ export class AiPlayerComponent implements OnInit {
               (combination): boolean => {
                 return combination.every((i): boolean => {
                   return this.board[i] === 'x';
-                }) ? true : false;
+                });
               }) ? 10
             : this.winningComb.some(
               (combination): boolean => {
                 return combination.every((i): boolean => {
                   return this.board[i] === 'circle';
-                }) ? true : false;
+                });
               }) ? -10
-            : 0 ;
+            : this.board.every(
+              c => c === 'x' || c === 'circle'
+            ) ? 0 : NaN;
   }
-
-  //[-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-][-]
-
-  // It considers all the possible ways the game can go and returns the value of the board
 
   private minimax(depth: number, isMaximizing: boolean): number {
     let score: number = this.checkWin();
-    if (score !== 0) {
-      this.count++;
+
+    if (!Number.isNaN(Number(score))) {
       return score;
-    } else {
-      if (isMaximizing) { // X turn
-        let best: number = -1000;
-        for (let i: number = 0; i < this.board.length; i++) {
-          if (this.board[i] === '') {
-            this.board[i] = this.human;
-            let s: number = this.minimax(depth + 1, !isMaximizing);
-            this.board[i] = '';
-            // if (s > score) {
-            //   score = s;
-            // }
-            best = Math.max(s, best);
-          }
-        }
-        return best;
-      } else { // Circle turn
-        let best: number = 1000;
-        for (let i: number = 0; i < this.board.length; i++) {
-          if (this.board[i] === '') {
-            this.board[i] = this.aiPlay;
-            let s: number = this.minimax(depth + 1, !isMaximizing);
-            this.board[i] = '';
-            // if (s < score) {
-            //   score = s;
-            // }
-            best = Math.min(s, best);
-          }
-        }
-        return best;
-      }
     }
+
+    if (isMaximizing) { // X turn
+      let best: number = -1000;
+      for (let i: number = 0; i < this.board.length; i++) {
+        if (this.board[i] === '') {
+          this.board[i] = this.human;
+          let s: number = this.minimax(depth + 1, !isMaximizing);
+          this.board[i] = '';
+          // if (s > score) {
+          //   score = s;
+          // }
+          best = Math.max(s, best);
+        }
+      }
+      return best;
+    } else { // Circle turn
+      let best: number = 1000;
+      for (let i: number = 0; i < this.board.length; i++) {
+        if (this.board[i] === '') {
+          this.board[i] = this.aiPlay;
+          let s: number = this.minimax(depth + 1, !isMaximizing);
+          this.board[i] = '';
+          // if (s < score) {
+          //   score = s;
+          // }
+          best = Math.min(s, best);
+        }
+      }
+      return best;
+    }
+  }
+
+  public itMoved(): boolean {
+    return !Number.isNaN(Number(this.move));
   }
 
 }

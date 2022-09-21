@@ -26,7 +26,7 @@ export class BoardComponent implements OnInit {
     [2, 4, 6]
   ];
 
-  public currentPlay: string = 'x'
+  public currentPlay: string = ''
 
   public cells: string[] = ['','','','','','','','',''];
 
@@ -34,7 +34,9 @@ export class BoardComponent implements OnInit {
 
   constructor() { }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.currentPlay = 'x';
+  }
 
   public handleClick(index: number): void {
     setTimeout((): void => {
@@ -52,7 +54,7 @@ export class BoardComponent implements OnInit {
         this.updatePlay.emit(this.currentPlay);
         this.aiIndex = NaN;
       }
-    })
+    });
 
   }
 
@@ -66,11 +68,17 @@ export class BoardComponent implements OnInit {
   }
 
   private endGame(draw: boolean): void {
+    this.currentPlay = 'x';
     if (draw) {
       this.message.emit("It's Draw!");
     } else {
       this.message.emit((this.isCircle? "O's" : "X's") + "Wins!");
     }
+    setTimeout((): void => {
+      this.isNew = false;
+      this.cells = ['','','','','','','','',''];
+      this.isCircle = false;
+    }, 0);
   }
 
   private isDraw(): boolean {
@@ -82,15 +90,16 @@ export class BoardComponent implements OnInit {
   public isReady(): boolean {
     let toReturn: boolean = false;
     if (this.isNew) {
-      this.currentPlay = 'x';
-      this.cells = ['','','','','','','','',''];
-      this.isCircle = false;
-      this.isNew = false;
       toReturn = true;
     } else {
       return Number.isNaN(Number(this.aiIndex));
     }
 
+    return toReturn;
+  }
+
+  public getMessage(): string {
+    let toReturn: string = 'Your turn!';
     return toReturn;
   }
 
