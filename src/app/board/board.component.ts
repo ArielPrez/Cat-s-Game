@@ -8,7 +8,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class BoardComponent implements OnInit {
 
   @Input() isNew!: boolean;
+  @Input() aiIndex!: number;
   @Output() message: EventEmitter<string> = new EventEmitter();
+  @Output() updateBoard: EventEmitter<Array<string>> = new EventEmitter();
+  @Output() updatePlay: EventEmitter<string> = new EventEmitter();
 
   private cross: string = 'x'
   private circle: string = 'circle'
@@ -23,7 +26,7 @@ export class BoardComponent implements OnInit {
     [2, 4, 6]
   ];
 
-  public currentClass: string = 'x'
+  public currentPlay: string = ''
 
   public cells: string[] = ['','','','','','','','',''];
 
@@ -31,19 +34,27 @@ export class BoardComponent implements OnInit {
 
   constructor() { }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.currentPlay = 'x';
+  }
 
   public handleClick(index: number): void {
-    this.currentClass = this.isCircle ? this.circle : this.cross;
-    this.cells[index] = this.currentClass;
-    if (this.checkWin()) {
-      this.endGame(false);
-    } else if(this.isDraw()) {
-      this.endGame(true);
-    } else {
-      this.isCircle = !this.isCircle;
-      this.currentClass = this.isCircle ? this.circle : this.cross;
-    }
+    setTimeout((): void => {
+      if (!Number.isNaN(Number(index)) && !this.checkWin()) {
+        this.cells[index] = this.currentPlay;
+        if (this.checkWin()) {
+          this.endGame(false);
+        } else if(this.isDraw()) {
+          this.endGame(true);
+        } else {
+          this.isCircle = !this.isCircle;
+          this.currentPlay = this.isCircle ? this.circle : this.cross;
+        }
+        this.updateBoard.emit(this.cells);
+        this.updatePlay.emit(this.currentPlay);
+        this.aiIndex = NaN;
+      }
+    });
 
   }
 
@@ -51,17 +62,23 @@ export class BoardComponent implements OnInit {
     return this.winningComb.some(
       (combination): boolean => {
         return combination.every((i): boolean => {
-          return this.cells[i] === this.currentClass;
+          return this.cells[i] === this.currentPlay;
         })
       });
   }
 
   private endGame(draw: boolean): void {
+    this.currentPlay = 'x';
     if (draw) {
       this.message.emit("It's Draw!");
     } else {
       this.message.emit((this.isCircle? "O's" : "X's") + "Wins!");
     }
+    setTimeout((): void => {
+      this.isNew = false;
+      this.cells = ['','','','','','','','',''];
+      this.isCircle = false;
+    }, 0);
   }
 
   private isDraw(): boolean {
@@ -71,16 +88,19 @@ export class BoardComponent implements OnInit {
   }
 
   public isReady(): boolean {
+    let toReturn: boolean = false;
     if (this.isNew) {
-      this.currentClass = 'x';
-      this.cells = ['','','','','','','','',''];
-      this.isCircle = false;
-      this.isNew = false;
-      return true;
+      toReturn = true;
     } else {
-      return false;
+      return Number.isNaN(Number(this.aiIndex));
     }
 
+    return toReturn;
+  }
+
+  public getMessage(): string {
+    let toReturn: string = 'Your turn!';
+    return toReturn;
   }
 
 }

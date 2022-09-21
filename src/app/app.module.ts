@@ -5,12 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BoardComponent } from './board/board.component';
 import { MessageComponent } from './message/message.component';
+import { AiPlayerComponent } from './ai-player/ai-player.component';
 
 @NgModule({
-  declarations: [		
+  declarations: [			
     AppComponent,
       BoardComponent,
-      MessageComponent
+      MessageComponent,
+      AiPlayerComponent
    ],
   imports: [
     BrowserModule,

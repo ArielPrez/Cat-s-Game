@@ -17,7 +17,7 @@ export class MessageComponent implements OnInit, OnChanges {
 
   public ngOnChanges(): void {
     if (this.message !== '') {
-      console.log(this.message);
+      // console.log(this.message);
     }
   }
 

@@ -1,9 +1,9 @@
-<div #board
-     [class]="'board ' + currentClass"
+<div #board [dir]="currentPlay !== 'circle'? getMessage() : 'Now I will move!'"
+     [class]="'board ' + currentPlay"
      [hidden]="isReady()">
   <div *ngFor="let cell of cells; let i=index"
         [class]="'cell ' +  cells[i]"
         [id]="i"
-        (click)="cell === ''? handleClick(i) : ''; $event.stopPropagation();">
+        (click)="cell === '' && this.currentPlay !== ''? handleClick(i) : ''; $event.stopPropagation();">
   </div>
 </div>

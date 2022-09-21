@@ -1,5 +1,13 @@
-<app-board (message)="setMessage($event)"
-           [isNew]="reset"></app-board>
+<app-board #boardElement
+           [isNew]="reset"
+           (message)="setMessage($event)"
+           (updateBoard)="setBoard($event)"
+           (updatePlay)="setMove($event)"></app-board>
+           <!-- [aiIndex]="index" -->
 
 <app-message [message]="gameResult"
              (restart)="resetGame($event)"></app-message>
+
+<app-ai-player [board]="board"
+               [play]="currentMove"
+               (aiMove)="setAIMove($event)"></app-ai-player>

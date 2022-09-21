@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { BoardComponent } from './board/board.component';
 
 @Component({
   selector: 'app-root',
@@ -7,8 +8,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class AppComponent {
 
-  public gameResult: string = '';
+  @ViewChild('boardElement') boardElement: BoardComponent = new BoardComponent;
+
   public reset: boolean = false;
+  public gameResult: string = '';
+  public board: string[] = [];
+  public currentMove: string = '';
+  public index: number = NaN;
 
   public setMessage(message: string): void {
     this.reset = false;
@@ -18,5 +24,19 @@ export class AppComponent {
   public resetGame(reset: boolean): void {
     this.gameResult = '';
     this.reset = reset;
+  }
+
+  public setBoard(board: string[]): void {
+    this.board = board;
+  }
+
+  public setMove(move: string): void {
+    this.currentMove = move;
+  }
+
+  public setAIMove(move: number): void {
+    // this.index = move;
+    this.boardElement.aiIndex = move;
+    this.boardElement.handleClick(move);
   }
 }
