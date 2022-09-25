@@ -52,7 +52,7 @@ export class AiPlayerComponent implements OnInit {
         this.aiMove.emit(this.move);
         this.move = NaN;
         toReturn = true;
-      }, 1500);
+      }, 500);
     }
     return toReturn;
   }

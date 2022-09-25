@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnChanges {
 
   @Input() isNew!: boolean;
   @Input() aiIndex!: number;
@@ -38,6 +38,12 @@ export class BoardComponent implements OnInit {
     this.currentPlay = 'x';
   }
 
+  public ngOnChanges(): void {
+    if (this.isNew) {
+      this.clearBoard();
+    }
+  }
+
   public handleClick(index: number): void {
     setTimeout((): void => {
       if (!Number.isNaN(Number(index)) && !this.checkWin()) {
@@ -68,17 +74,11 @@ export class BoardComponent implements OnInit {
   }
 
   private endGame(draw: boolean): void {
-    this.currentPlay = 'x';
     if (draw) {
-      this.message.emit("It's Draw!");
+      this.message.emit('draw'); // Draw
     } else {
-      this.message.emit((this.isCircle? "O's" : "X's") + "Wins!");
+      this.message.emit(this.currentPlay); // Win
     }
-    setTimeout((): void => {
-      this.isNew = false;
-      this.cells = ['','','','','','','','',''];
-      this.isCircle = false;
-    }, 0);
   }
 
   private isDraw(): boolean {
@@ -87,19 +87,31 @@ export class BoardComponent implements OnInit {
     );
   }
 
-  public isReady(): boolean {
-    let toReturn: boolean = false;
-    if (this.isNew) {
-      toReturn = true;
-    } else {
-      return Number.isNaN(Number(this.aiIndex));
-    }
+  public clearBoard(): void {
+    setTimeout((): void => {
+      this.currentPlay = 'x';
+      this.isNew = false;
+      this.cells = ['','','','','','','','',''];
+      this.isCircle = false;
+    }, 0);
+    // let toReturn: boolean = false;
+    // if (this.isNew) {
+    //   // toReturn = true;
+    // }
+    // } else {
+    //   return Number.isNaN(Number(this.aiIndex));
+    // }
 
-    return toReturn;
+    // return toReturn;
   }
 
   public getMessage(): string {
-    let toReturn: string = 'Your turn!';
+    let toReturn: string = '';
+    if (this.currentPlay === 'x') {
+      toReturn = 'Your turn!';
+    } else {
+      toReturn = 'Now I will move!';
+    }
     return toReturn;
   }
 

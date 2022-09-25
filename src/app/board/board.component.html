@@ -1,6 +1,5 @@
-<div #board [dir]="currentPlay !== 'circle'? getMessage() : 'Now I will move!'"
-     [class]="'board ' + currentPlay"
-     [hidden]="isReady()">
+<div #board [dir]="getMessage()"
+     [class]="'board ' + currentPlay">
   <div *ngFor="let cell of cells; let i=index"
         [class]="'cell ' +  cells[i]"
         [id]="i"

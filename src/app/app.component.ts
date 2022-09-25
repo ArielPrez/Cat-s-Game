@@ -10,7 +10,7 @@ export class AppComponent {
 
   @ViewChild('boardElement') boardElement: BoardComponent = new BoardComponent;
 
-  public reset: boolean = false;
+  public reset: boolean = true;
   public gameResult: string = '';
   public board: string[] = [];
   public currentMove: string = '';
@@ -23,7 +23,7 @@ export class AppComponent {
 
   public resetGame(reset: boolean): void {
     this.gameResult = '';
-    this.reset = reset;
+    // this.reset = reset;
   }
 
   public setBoard(board: string[]): void {
@@ -35,7 +35,6 @@ export class AppComponent {
   }
 
   public setAIMove(move: number): void {
-    // this.index = move;
     this.boardElement.aiIndex = move;
     this.boardElement.handleClick(move);
   }
