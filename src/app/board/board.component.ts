@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Player } from '../models/player';
 
 @Component({
   selector: 'app-board',
@@ -8,6 +9,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 export class BoardComponent implements OnInit, OnChanges {
 
   @Input() isNew!: boolean;
+  @Input() player!: Player;
   @Input() aiIndex!: number;
   @Output() message: EventEmitter<string> = new EventEmitter();
   @Output() updateBoard: EventEmitter<Array<string>> = new EventEmitter();
@@ -32,15 +34,16 @@ export class BoardComponent implements OnInit, OnChanges {
 
   private isCircle: boolean = false;
 
-  constructor() { }
+  constructor() {}
 
-  public ngOnInit(): void {
-    this.currentPlay = 'x';
-  }
+  public ngOnInit(): void {}
 
   public ngOnChanges(): void {
     if (this.isNew) {
       this.clearBoard();
+    }
+    if (this.player !== undefined) {
+      this.currentPlay = this.player.choice;
     }
   }
 

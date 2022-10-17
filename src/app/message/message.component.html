@@ -1,23 +1,27 @@
 <div [class]="'message ' + (message !== '' || isNew? 'show' : '')" id="message">
   <ng-container *ngIf="isNew; else elseReset">
-    <div>
-      <h3>Chose an Option</h3>
-      <div class="cell">
-        <div class="x">X</div>
-        <div class="circle">Circle</div>
+    <div class="start_game">
+      <label>Chose an Option</label>
+      <div class="user">
+        <input #player_name placeholder="Player Name" type="text">
       </div>
-      <label for="">Name</label>
-      <input type="text"></div>
-      <button id="reset"
-              (click)="restart.emit(true); message = ''">
-        Start
-      </button>
+      <div class="player_choice">
+        <div class="team_choice">
+          <div class="x"
+               (click)="startGame(player_name.value, 'X')">X</div>
+        </div>
+        <div class="team_choice">
+          <div class="circle"
+               (click)="startGame(player_name.value, 'O')">O</div>
+        </div>
+      </div>
+    </div>
   </ng-container>
   <ng-template #elseReset>
 
     <div class="" >{{message}}</div>
     <button id="reset"
-            (click)="restart.emit(true); message = ''">
+            (click)="startGame('','')">
       Reset Game
     </button>
 

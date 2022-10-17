@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { BoardComponent } from './board/board.component';
+import { Player } from './models/player';
 
 @Component({
   selector: 'app-root',
@@ -15,14 +16,18 @@ export class AppComponent {
   public board: string[] = [];
   public currentMove: string = '';
   public index: number = NaN;
+  public player: Player = new Player();
 
   public setMessage(message: string): void {
     this.reset = false;
     this.gameResult = message;
   }
 
-  public resetGame(reset: boolean): void {
+  public resetGame(player: Player): void {
+    console.log("player: ", player);
     this.gameResult = '';
+    this.player = player;
+    this.reset = false;
     // this.reset = reset;
   }
 
