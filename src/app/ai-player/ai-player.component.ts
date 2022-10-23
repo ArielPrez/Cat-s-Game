@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { BoardComponent } from '../board/board.component';
+import { Player } from '../models/player';
 
 @Component({
   selector: 'app-ai-player',
@@ -8,10 +9,8 @@ import { BoardComponent } from '../board/board.component';
 })
 export class AiPlayerComponent implements OnInit {
 
-  @ViewChild('boardElement') boardElement: BoardComponent = new BoardComponent;
-
   @Input() board!: Array<string>;
-  @Input() play!: string;
+  @Input() player!: Player;
   @Output() aiMove: EventEmitter<number> = new EventEmitter();
 
   private boardLength: number = 0;
@@ -37,22 +36,27 @@ export class AiPlayerComponent implements OnInit {
   public getChange(): boolean {
     let toReturn: boolean = false;
     const count: number = this.getMarksCount();
-    if (this.aiPlay === '' && this.play !== '') {
-      this.aiPlay = this.play
-      if (this.aiPlay === 'x') {
-        this.human = 'circle';
-      } else {
-        this.human = 'x';
+    if (this.player.name !== '') {
+      if (this.aiPlay === '' && count !== 0) {
+        this.boardLength = 0;
+        this.aiPlay = this.player.choice;
+        if (this.aiPlay === 'x') {
+          this.human = 'circle';
+        } else {
+          this.human = 'x';
+        }
       }
-    }
-    if (count !== this.boardLength && count !== 0 && this.play === this.aiPlay) {
-      this.boardLength = count;
-      this.move = this.bestMove();
-      setTimeout((): void => { // AI Turn! =>
-        this.aiMove.emit(this.move);
-        this.move = NaN;
-        toReturn = true;
-      }, 500);
+      if (count !== this.boardLength && count !== 0 && this.player.choice === this.aiPlay) {
+        this.boardLength = count;
+        this.move = this.bestMove();
+        setTimeout((): void => { // AI Turn! =>
+          if (!Number.isNaN(Number(this.move))) {
+            this.aiMove.emit(this.move);
+            this.move = NaN;
+            toReturn = true;
+          }
+        }, 100);
+      }
     }
     return toReturn;
   }
@@ -75,7 +79,7 @@ export class AiPlayerComponent implements OnInit {
     //   toReturn = this.bestMove();
     // }
 
-    let toReturn: number = -1; // Index in the board of the best posible move;
+    let toReturn: number = NaN; // Index in the board of the best posible move;
     let bestScore: number = Infinity; // The score for a move.
 
     for (let i: number = 0; i < this.board.length; i++) {
@@ -125,9 +129,6 @@ export class AiPlayerComponent implements OnInit {
           this.board[i] = this.human;
           let s: number = this.minimax(depth + 1, !isMaximizing);
           this.board[i] = '';
-          // if (s > score) {
-          //   score = s;
-          // }
           best = Math.max(s, best);
         }
       }
@@ -139,9 +140,6 @@ export class AiPlayerComponent implements OnInit {
           this.board[i] = this.aiPlay;
           let s: number = this.minimax(depth + 1, !isMaximizing);
           this.board[i] = '';
-          // if (s < score) {
-          //   score = s;
-          // }
           best = Math.min(s, best);
         }
       }
@@ -149,8 +147,5 @@ export class AiPlayerComponent implements OnInit {
     }
   }
 
-  public itMoved(): boolean {
-    return !Number.isNaN(Number(this.move));
-  }
 
 }

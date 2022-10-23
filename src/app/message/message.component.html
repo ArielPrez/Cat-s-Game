@@ -6,13 +6,13 @@
         <input #player_name placeholder="Player Name" type="text">
       </div>
       <div class="player_choice">
-        <div class="team_choice">
-          <div class="x"
-               (click)="startGame(player_name.value, 'X')">X</div>
+        <div class="team_choice"
+             (click)="startGame(player_name.value, 'x')">
+          <div class="x">X</div>
         </div>
-        <div class="team_choice">
-          <div class="circle"
-               (click)="startGame(player_name.value, 'O')">O</div>
+        <div class="team_choice"
+             (click)="startGame(player_name.value, 'circle')">
+          <div class="circle">O</div>
         </div>
       </div>
     </div>
@@ -21,7 +21,7 @@
 
     <div class="" >{{message}}</div>
     <button id="reset"
-            (click)="startGame('','')">
+            (click)="isNew = true">
       Reset Game
     </button>
 

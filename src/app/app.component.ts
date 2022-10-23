@@ -1,7 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
-import { BoardComponent } from './board/board.component';
+import { Component } from '@angular/core';
+import { Game } from './models/game';
 import { Player } from './models/player';
 
+interface StartGame {
+  player: Player,
+  isNew: boolean
+}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,38 +13,46 @@ import { Player } from './models/player';
 })
 export class AppComponent {
 
-  @ViewChild('boardElement') boardElement: BoardComponent = new BoardComponent;
+  public resultMessage: string = '';
+  public aiIndex: number = NaN;
+  public start!: StartGame;
+  public game: Game = new Game();
 
-  public reset: boolean = true;
-  public gameResult: string = '';
-  public board: string[] = [];
-  public currentMove: string = '';
-  public index: number = NaN;
-  public player: Player = new Player();
-
-  public setMessage(message: string): void {
-    this.reset = false;
-    this.gameResult = message;
+  constructor() {
+    this.resetGame();
   }
 
-  public resetGame(player: Player): void {
-    console.log("player: ", player);
-    this.gameResult = '';
-    this.player = player;
-    this.reset = false;
-    // this.reset = reset;
+  public setMessage(message: string): void {
+    this.resultMessage = message;
+    this.start.isNew = true;
+    this.resetGame();
+  }
+
+  private resetGame(): void {
+    this.start = {
+      player: new Player(),
+      isNew: true
+    };
+    this.start.player.name = '';
+    this.start.player.choice = '';
+    this.game.board = [];
+  }
+
+  public startGame(start: StartGame): void {
+    console.log("player: ", start.player);
+    this.resultMessage = '';
+    this.start.player = new Player().load(start.player);
   }
 
   public setBoard(board: string[]): void {
-    this.board = board;
+    this.game.board = board;
   }
 
   public setMove(move: string): void {
-    this.currentMove = move;
+    this.start.player.choice = move;
   }
 
   public setAIMove(move: number): void {
-    this.boardElement.aiIndex = move;
-    this.boardElement.handleClick(move);
+    this.aiIndex = move;
   }
 }

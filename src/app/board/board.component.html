@@ -1,9 +1,10 @@
 <div #board [dir]="getMessage()"
-     [class]="'board ' + currentPlay">
-  <div *ngFor="let cell of cells; let i=index"
-        [class]="'cell ' +  cells[i]"
+     [class]="'board ' + this.game.currentPlay">
+  <div *ngFor="let cell of this.game.board; let i=index"
+        [class]="'cell ' +  this.game.board[i]"
         [id]="i"
-        (click)="cell === '' && this.currentPlay !== ''? handleClick(i) : ''; $event.stopPropagation();">
+        (click)="cell === '' && this.game.currentPlay !== ''? handleClick(i) : ''; $event.stopPropagation();">
   </div>
 </div>
-<label for="">{{ player?.name }}</label>
+
+<h1 class="mt-3" for="">{{ player.name }}</h1>

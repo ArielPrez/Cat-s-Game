@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { Player } from '../models/player';
 
+interface StartGame {
+  player: Player,
+  isNew: boolean
+}
 @Component({
   selector: 'app-message',
   templateUrl: './message.component.html',
@@ -11,7 +15,7 @@ export class MessageComponent implements OnInit, OnChanges {
   @Input() isNew!: boolean;
   @Input() message!: string;
 
-  @Output() player: EventEmitter<Player> = new EventEmitter();
+  @Output() player: EventEmitter<StartGame> = new EventEmitter();
   @Output() restart: EventEmitter<boolean> = new EventEmitter();
 
   constructor() { }
@@ -30,14 +34,14 @@ export class MessageComponent implements OnInit, OnChanges {
 
   public startGame(name: string, choice: string): void {
     this.message = '';
-    const p: Player = {name: name, choice: choice};
-    if (this.isNew) {
-      this.isNew = false;
-      this.player.emit(p);
-      this.restart.emit(true);
-    } else {
-      this.restart.emit(true);
+    const p: Player = new Player().load({name: name, choice: choice});
+    const obj: StartGame = {
+      player: p,
+      isNew: true
     }
+    this.isNew = false;
+    this.player.emit(obj);
+    this.restart.emit(true);
   }
 
 }
