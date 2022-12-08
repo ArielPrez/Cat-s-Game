@@ -1,5 +1,9 @@
 # CatSGame
 
+A tic tac toe game so that the user can play with a AI and "maybe" to win...
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.1.2.
 
 ## Development server
