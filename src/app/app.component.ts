@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { Game } from './models/game';
-import { Player } from './models/player';
+import { StringService } from './service/string.service';
 
-interface StartGame {
-  player: Player,
-  isNew: boolean
-}
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -13,46 +9,74 @@ interface StartGame {
 })
 export class AppComponent {
 
-  public resultMessage: string = '';
+  private winningComb: number[][] = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+
+  public winnerMessage: string = '';
   public aiIndex: number = NaN;
-  public start!: StartGame;
+  public isNew: boolean = true;
   public game: Game = new Game();
 
-  constructor() {
-    this.resetGame();
+  constructor(public stringService: StringService) { }
+
+  public getNew(): boolean {
+    return this.isNew;
   }
 
-  public setMessage(message: string): void {
-    this.resultMessage = message;
-    this.start.isNew = true;
-    this.resetGame();
-  }
-
-  private resetGame(): void {
-    this.start = {
-      player: new Player(),
-      isNew: true
-    };
-    this.start.player.name = '';
-    this.start.player.choice = '';
-    this.game.board = [];
-  }
-
-  public startGame(start: StartGame): void {
-    console.log("player: ", start.player);
-    this.resultMessage = '';
-    this.start.player = new Player().load(start.player);
+  public startGame(game: Game): void { // First method to be called
+    this.winnerMessage = '';
+    this.game = new Game().load(game);
   }
 
   public setBoard(board: string[]): void {
     this.game.board = board;
-  }
 
-  public setMove(move: string): void {
-    this.start.player.choice = move;
+    if (this.checkWin()) {
+      this.endGame(false);
+    } else if(this.isDraw()) {
+      this.endGame(true);
+    } else {
+      this.game.currentPlay = this.game.currentPlay === 'x' ? 'circle' : 'x';
+    }
   }
 
   public setAIMove(move: number): void {
     this.aiIndex = move;
   }
+
+  private checkWin(): boolean {
+    return this.winningComb.some(
+      (combination): boolean => {
+        return combination.every((i): boolean => {
+          return this.game.board[i] === this.game.currentPlay;
+        })
+      });
+  }
+
+  private isDraw(): boolean {
+    return this.game.board.every(
+      b => b === 'x' || b === 'circle'
+    );
+  }
+
+  private endGame(draw: boolean): void {
+
+    if (draw) {
+      this.winnerMessage = 'draw'; // Draw
+    } else {
+      this.winnerMessage = this.game.currentPlay; // Win
+    }
+
+    this.game.player.choice = '';
+
+  }
+
 }

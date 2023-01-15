@@ -1,0 +1,39 @@
+<div [class]="'message ' + (message !== '' || isNew === true ? 'show' : '')" id="message">
+  <ng-container *ngIf="isNew; else elseReset">
+    <div class="start_game">
+      <label>Choose an Option</label>
+      <div class="user">
+        <input #player_name="ngModel"
+               id="player_name"
+               name="player_name"
+               type="text"
+               placeholder="Player Name"
+               [(ngModel)]="playerName">
+      </div>
+      <div class="player_choice">
+        <div [class]="playerName !== '' ? 'team_choice choise_over' : 'team_choice disable'"
+             (click)="playerName ? startGame('x') : ''">
+          <div class="x">X</div>
+        </div>
+        <div [class]="playerName !== '' ? 'team_choice choise_over' : 'team_choice disable'"
+             (click)="playerName ? startGame('circle') : ''">
+          <div class="circle">O</div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #elseReset>
+
+    <div *ngIf="playerName !== 'draw'" class="" >
+      {{stringService.capitalize(game.player.name)}} has lost.
+    </div>
+
+    <p class="" >{{message}}</p>
+
+    <button id="reset"
+            (click)="resetGame()">
+      Reset Game
+    </button>
+
+  </ng-template>
+</div>

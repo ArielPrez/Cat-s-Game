@@ -1,6 +1,3 @@
-<p [hidden]="!getChange()">
-  Move detected!!!
+<p *ngIf="game?.player?.choice" [hidden]="!getChange()">
+  <!-- Move detected!!! -->
 </p>
-<!-- <p [hidden]="!itMoved()">
-  The AI has moved!!!
-</p> -->

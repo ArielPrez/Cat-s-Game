@@ -1,15 +1,20 @@
-<app-board #boardElement
-           [isNew]="this.start.isNew"
-           [player]="this.start.player"
-           [aiIndex]="aiIndex"
-           (message)="setMessage($event)"
-           (updateBoard)="setBoard($event)"
-           (updatePlay)="setMove($event)"></app-board>
+<div class="game">
 
-<app-message [message]="resultMessage"
-             [isNew]="this.start.isNew"
-             (player)="startGame($event)"></app-message>
+  <span *ngIf="game.player?.choice !== ''" class="mt-3" for="">
+    {{stringService.capitalize(game.player? game.player.name : '')}}
+  </span>
 
-<app-ai-player [board]="this.game.board"
-               [player]="this.start.player"
-               (aiMove)="setAIMove($event)"></app-ai-player>
+  <app-board [aiIndex]="aiIndex"
+            [game]="game"
+            (updateBoard)="setBoard($event)">
+  </app-board>
+
+  <app-start [message]="winnerMessage"
+            [isNew]="isNew"
+            [game]="game"
+            (newGame)="startGame($event)"></app-start>
+
+  <app-ai-player [game]="game"
+                (aiMove)="setAIMove($event)"></app-ai-player>
+
+</div>
