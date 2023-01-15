@@ -1,0 +1,98 @@
+
+.message {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0, 0.7);
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 36px;
+  flex-direction: column;
+
+  button {
+    font-size: 22px;
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px 7px;
+    border-radius: 10px;
+    margin-top: 5px;
+    padding: 5px 15px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color:rgba(0,0,0, 0.7);
+    color: white;
+    border-color: white;
+  }
+
+  .start_game {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 260px;
+
+    label {
+      display: flex;
+      justify-content: center;
+      box-shadow: 0px 2px;
+      padding: 5px 0px;
+      color: #e6e6e6;
+    }
+
+    .player_choice {
+      display: flex;
+      justify-content: space-evenly;
+
+      .team_choice {
+        width: calc(var(--cell-size)/2);
+        height: calc(var(--cell-size)/2);
+        border: 2px solid black;
+        background-color: rgb(230, 230, 230);
+        color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        cursor: pointer;
+        border-radius: 15px;
+        box-shadow: 0px 5px;
+      }
+      .choise_over:hover {
+        margin: 2px 0px -2px 0px;
+        box-shadow: 0px 0px;
+      }
+      .disable {
+        color: #e6e6e6;
+        background-color:#444444ac;
+        border: 2px solid #e6e6e6;
+        cursor: default;
+      }
+    }
+
+    .user {
+      display: flex;
+      justify-content: center;
+      input {
+        background-color:#e6e6e6;
+        border-radius: 6px;
+        height: 48px;
+        text-align: center;
+        font-size: large;
+        font-family: Roboto,Helvetica Neue,sans-serif;
+      }
+    }
+  }
+
+  .start_game>div {
+    margin: 15px 0px;
+  }
+
+}
+
+.message.show {
+  display: flex;
+}

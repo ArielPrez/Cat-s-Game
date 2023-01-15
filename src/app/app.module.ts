@@ -4,19 +4,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BoardComponent } from './board/board.component';
-import { MessageComponent } from './message/message.component';
+import { StartComponent } from './start/start.component';
 import { AiPlayerComponent } from './ai-player/ai-player.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [			
+  declarations: [
     AppComponent,
-      BoardComponent,
-      MessageComponent,
-      AiPlayerComponent
+    BoardComponent,
+    StartComponent,
+    AiPlayerComponent
    ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

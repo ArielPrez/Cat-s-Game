@@ -1,9 +1,13 @@
-<div #board [dir]="currentPlay !== 'circle'? getMessage() : 'Now I will move!'"
-     [class]="'board ' + currentPlay"
-     [hidden]="isReady()">
-  <div *ngFor="let cell of cells; let i=index"
-        [class]="'cell ' +  cells[i]"
-        [id]="i"
-        (click)="cell === '' && this.currentPlay !== ''? handleClick(i) : ''; $event.stopPropagation();">
+<span *ngIf="game &&
+             game.board &&
+             game.currentPlay &&
+             game.player">
+  <div [dir]="getMessage()"
+      [class]="'board ' + this.game.currentPlay">
+    <div *ngFor="let cell of this.game.board; let i=index"
+          [class]="'cell ' +  this.game.board[i]"
+          [id]="i"
+          (click)="cell === '' && this.game.currentPlay !== ''? handleClick(i) : ''; $event.stopPropagation();">
+    </div>
   </div>
-</div>
+</span>
