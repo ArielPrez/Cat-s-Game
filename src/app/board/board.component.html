@@ -3,9 +3,10 @@
              game.currentPlay &&
              game.player">
   <div [dir]="getMessage()"
-      [class]="'board ' + this.game.currentPlay">
+       [class]="'board ' + this.game.currentPlay">
     <div *ngFor="let cell of this.game.board; let i=index"
           [class]="'cell ' +  this.game.board[i]"
+          [style.pointer-events]="game.currentPlay !== game.player.choice ? 'none' : 'auto'"
           [id]="i"
           (click)="cell === '' && this.game.currentPlay !== ''? handleClick(i) : ''; $event.stopPropagation();">
     </div>
