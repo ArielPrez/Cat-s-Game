@@ -27,9 +27,9 @@ export class AppComponent {
 
   constructor(public stringService: StringService) { }
 
-  public getNew(): boolean {
-    return this.isNew;
-  }
+  // public getNew(): boolean {
+  //   return this.isNew;
+  // }
 
   public startGame(game: Game): void { // First method to be called
     this.winnerMessage = '';

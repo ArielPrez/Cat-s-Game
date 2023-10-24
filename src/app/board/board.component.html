@@ -1,7 +1,8 @@
 <span *ngIf="game &&
              game.board &&
              game.currentPlay &&
-             game.player">
+             game.player"
+             class="outsideBoard">
   <div [dir]="getMessage()"
        [class]="'board ' + this.game.currentPlay">
     <div *ngFor="let cell of this.game.board; let i=index"

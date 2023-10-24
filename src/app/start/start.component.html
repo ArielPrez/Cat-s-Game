@@ -1,5 +1,9 @@
-<div [class]="'message ' + (message !== '' || isNew === true ? 'show' : '')" id="message">
-  <ng-container *ngIf="isNew; else elseReset">
+<div id="message"
+     [class]="'message ' + (message !== '' || isNew === true ? 'show' : '')"
+     [style.visibility]="!isNew ? 'hidden' : 'visible'">
+
+  <ng-container *ngIf="message === ''; else elseReset">
+
     <div class="start_game">
       <label>Choose an Option</label>
       <div class="user">
@@ -21,14 +25,16 @@
         </div>
       </div>
     </div>
+
   </ng-container>
+
   <ng-template #elseReset>
 
-    <div *ngIf="playerName !== 'draw'" class="" >
+    <div *ngIf="playerName !== 'draw'">
       {{stringService.capitalize(game.player.name)}} has lost.
     </div>
 
-    <p class="" >{{message}}</p>
+    <p>{{message}}</p>
 
     <button id="reset"
             (click)="resetGame()">
