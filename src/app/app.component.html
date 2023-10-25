@@ -1,20 +1,31 @@
-<div class="game">
+<div class="main">
 
-  <span *ngIf="game.player?.choice !== ''" class="mt-3" for="">
-    {{stringService.capitalize(game.player? game.player.name : '')}}
-  </span>
+  <div class="game">
 
-  <app-board [aiIndex]="aiIndex"
-            [game]="game"
-            (updateBoard)="setBoard($event)">
-  </app-board>
+    <span *ngIf="game.player?.choice !== ''">
+      {{stringService.capitalize(game.player? game.player.name : '')}}
+    </span>
 
-  <app-start [message]="winnerMessage"
-            [isNew]="isNew"
-            [game]="game"
-            (newGame)="startGame($event)"></app-start>
+    <app-board [aiIndex]="aiIndex"
+              [game]="game"
+              (updateBoard)="setBoard($event)">
+    </app-board>
 
-  <app-ai-player [game]="game"
-                (aiMove)="setAIMove($event)"></app-ai-player>
+    <app-start [message]="winnerMessage"
+              [isNew]="isNew"
+              [game]="game"
+              (newGame)="startGame($event)"></app-start>
+
+    <app-ai-player [game]="game"
+                  (aiMove)="setAIMove($event)"></app-ai-player>
+
+  </div>
+
+
+  <div class="post"
+       [style.visibility]="game.player && winnerMessage === ''? 'visible' : 'hidden'">
+    <app-post-create></app-post-create>
+  </div>
 
 </div>
+

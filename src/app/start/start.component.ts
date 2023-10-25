@@ -24,6 +24,7 @@ export class StartComponent implements OnInit, OnChanges {
 
   public ngOnChanges(): void {
     if (this.message !== '') {
+      this.isNew = true;
       this.playerName = this.message;
       if (this.message !== 'draw') {
         this.message = "~ " +

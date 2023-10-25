@@ -1,126 +1,132 @@
-
-.board {
-  margin: 10px;
-  border: 1px dotted rgba(128, 128, 128, 0.5);
-  border-radius: 15px;
-  width: 450px;
-  height: 450px;
-  display: grid;
-  justify-content: center;
-  align-content: center;
-  justify-items: center;
-  align-items: center;
-  grid-template-columns: repeat(3, auto);
-  background-color: rgba(128, 128, 128, 0.05);
-}
-
-.cell {
-  width: var(--cell-size);
-  height: var(--cell-size);
-  border: 1px solid black;
+.outsideBoard {
   display: flex;
   justify-content: center;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-}
 
-.cell:first-child,
-.cell:nth-child(2),
-.cell:nth-child(3) {
-border-top: none;
-}
+  .board {
+    margin: 10px;
+    border: 1px dotted rgba(128, 128, 128, 0.5);
+    border-radius: 15px;
+    width: 350px;
+    height: 350px;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: repeat(3, auto);
+    background-color: whitesmoke;
+    // background-color: rgba(128, 128, 128, 0.05);
+  }
 
-.cell:nth-child(3n + 1) {
-  border-left: none;
-}
+  .cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+  }
 
-.cell:nth-child(3n + 3) {
-  border-right: none;
-}
+  .cell:first-child,
+  .cell:nth-child(2),
+  .cell:nth-child(3) {
+    border-top: none;
+  }
 
-.cell:last-child,
-.cell:nth-child(7),
-.cell:nth-child(8) {
-  border-bottom: none;
-}
+  .cell:nth-child(3n + 1) {
+    border-left: none;
+  }
 
-.cell.x,
-.cell.circle {
-  cursor: not-allowed;
-}
+  .cell:nth-child(3n + 3) {
+    border-right: none;
+  }
 
-.cell.x::before,
-.cell.x::after,
-.cell.circle::before {
-  background-color: black;
-}
+  .cell:last-child,
+  .cell:nth-child(7),
+  .cell:nth-child(8) {
+    border-bottom: none;
+  }
 
-.board.x .cell:not(.x):not(.circle):hover::before,
-.board.x .cell:not(.x):not(.circle):hover::after,
-.board.circle .cell:not(.x):not(.circle):hover::before {
-  background-color: lightgray;
-}
+  .cell.x,
+  .cell.circle {
+    cursor: not-allowed;
+  }
 
-.cell.x::before,
-.cell.x::after,
-.board.x .cell:not(.x):not(.circle):hover::before,
-.board.x .cell:not(.x):not(.circle):hover::after {
-  content: '';
-  position: absolute;
-  width: calc(var(--mark-size) * 0.15);
-  height: var(--mark-size);
-  // background-color: black;
-}
+  .cell.x::before,
+  .cell.x::after,
+  .cell.circle::before {
+    background-color: black;
+  }
 
-.cell.x::before,
-.board.x .cell:not(.x):not(.circle):hover::before {
-  transform: rotate(45deg);
-}
+  .board.x .cell:not(.x):not(.circle):hover::before,
+  .board.x .cell:not(.x):not(.circle):hover::after,
+  .board.circle .cell:not(.x):not(.circle):hover::before {
+    background-color: lightgray;
+  }
 
-.cell.x::after,
-.board.x .cell:not(.x):not(.circle):hover::after {
-  transform: rotate(-45deg);
-}
+  .cell.x::before,
+  .cell.x::after,
+  .board.x .cell:not(.x):not(.circle):hover::before,
+  .board.x .cell:not(.x):not(.circle):hover::after {
+    content: '';
+    position: absolute;
+    width: calc(var(--mark-size) * 0.15);
+    height: var(--mark-size);
+    // background-color: black;
+  }
 
-.cell.circle::before,
-.cell.circle::after,
-.board.circle .cell:not(.x):not(.circle):hover::before,
-.board.circle .cell:not(.x):not(.circle):hover::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-}
+  .cell.x::before,
+  .board.x .cell:not(.x):not(.circle):hover::before {
+    transform: rotate(45deg);
+  }
 
-.cell.circle::before,
-.board.circle .cell:not(.x):not(.circle):hover::before {
-  width: var(--mark-size);
-  height: var(--mark-size);
-  // background-color: black
-}
+  .cell.x::after,
+  .board.x .cell:not(.x):not(.circle):hover::after {
+    transform: rotate(-45deg);
+  }
 
-.cell.circle::after,
-.board.circle .cell:not(.x):not(.circle):hover::after {
-  width: calc(var(--mark-size) * 0.7);
-  height: calc(var(--mark-size) * 0.7);
-  // background-color: white;
-  background-color: rgba(249, 249, 249, 1);
+  .cell.circle::before,
+  .cell.circle::after,
+  .board.circle .cell:not(.x):not(.circle):hover::before,
+  .board.circle .cell:not(.x):not(.circle):hover::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+  }
 
-}
+  .cell.circle::before,
+  .board.circle .cell:not(.x):not(.circle):hover::before {
+    width: var(--mark-size);
+    height: var(--mark-size);
+    // background-color: black
+  }
 
-[dir] {
-  position: relative;
-}
-[dir]:hover::after {
-  content: attr(dir);
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: 10px;
-  padding: 5px 15px;
-  background-color: rgb(255, 255, 255);
-  color: black;
-  border: 0.5px solid rgba(128, 128, 128, 0.1);
-  border-radius: 15px;
+  .cell.circle::after,
+  .board.circle .cell:not(.x):not(.circle):hover::after {
+    width: calc(var(--mark-size) * 0.7);
+    height: calc(var(--mark-size) * 0.7);
+    // background-color: white;
+    background-color: rgba(249, 249, 249, 1);
+
+  }
+
+  [dir] {
+    position: relative;
+  }
+
+  [dir]:hover::after {
+    content: attr(dir);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 10px;
+    padding: 5px 15px;
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border: 0.5px solid rgba(128, 128, 128, 0.1);
+    border-radius: 15px;
+  }
 }
