@@ -1,3 +1,15 @@
-<div>
-  post-create works!
+<div class="postSection">
+
+  <textarea name=""
+            id=""
+            cols="50"
+            rows="20"
+            [disabled]="true"
+            [value]="newPost"></textarea>
+
+  <div class="inputSection">
+    <input type="text" [(ngModel)]="enteredValue">
+    <button (click)="onAddPost()">Save Post</button>
+  </div>
+
 </div>

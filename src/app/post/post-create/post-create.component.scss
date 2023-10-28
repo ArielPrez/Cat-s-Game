@@ -1,0 +1,11 @@
+.postSection {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+
+  .inputSection {
+    display: flex;
+    flex-direction: row;
+
+  }
+}
