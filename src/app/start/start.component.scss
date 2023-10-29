@@ -97,6 +97,10 @@
 
 }
 
+.message:nth-child(n+0) {
+  margin: 10px 0px;
+}
+
 .message.show {
   display: flex;
 }

@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-
-*, *::after, *::before {
+*,
+*::after,
+*::before {
   box-sizing: border-box;
 }
 
@@ -9,8 +10,12 @@
   --mark-size: calc(var(--cell-size) * 0.8);
 }
 
+html,
 body {
-  margin: 0px;
+  height: 100%;
 }
 
-
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

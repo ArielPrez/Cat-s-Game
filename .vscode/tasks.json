@@ -1,44 +1,66 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "ngserve",
-			"type": "shell",
-			"args": [
-        "serve"
-      ],
-      "command": "ng",
+  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
+  "version": "2.0.0",
+  "tasks": [
+    {
+      // "label": "ngserve",
+			// "type": "shell",
+			// "args": [
+      //   "serve"
+      // ],
+      // "command": "ng",
+      "type": "npm",
+      "script": "start",
       "isBackground": true,
-			"problemMatcher": [
-        {
-          "pattern": [
-            {
-              "regexp": "\\b\\B",
-              "file": 1,
-              "location": 2,
-              "message": 3
-            }
-          ],
-          "background": {
-            "activeOnStart": false,
-            "beginsPattern": ".",
-            "endsPattern": "^.*Compiled successfully.*"
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        // "pattern": [
+        //     {
+        //       "regexp": "\\b\\B",
+        //       "file": 1,
+        //       "location": 2,
+        //       "message": 3
+        //     }
+        //   ],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "bundle generation complete"
+          },
+          // "beginsPattern": ".",
+          // "endsPattern": "^.*Compiled successfully.*"
+        }
+      }
+    },
+    {
+      // "label": "ng build local",
+      // "type": "shell",
+      // "args": [
+      //   "build",
+      // ],
+      // "command": "ng",
+      "type": "npm",
+      "script": "test",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "typescript",
+        "pattern": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": {
+            "regexp": "(.*?)"
+          },
+          "endsPattern": {
+            "regexp": "bundle generation complete"
           }
         }
-      ],
-		},
-    {
-      "label": "ng build local",
-      "type": "shell",
-      "args": [
-        "build",
-      ],
-      "command": "ng",
-      "problemMatcher": [
-        "$tsc"
-      ],
-      "group": "build",
-      "detail": "ng build"
+      },
+      // "group": "build",
+      // "detail": "ng build"
     },
     {
       "label": "ng build Prod",
